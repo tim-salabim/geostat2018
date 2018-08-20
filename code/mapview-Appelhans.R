@@ -6,12 +6,15 @@ library("RColorBrewer")
 # vwr = options("viewer")
 # options(viewer = NULL)
 
+showMethods("mapView")
+
 ### basic usage ===========================================================
 
 ### most basic call
 mapview()
 
 ### with some data
+mapview(breweries)
 m = mapview(breweries)
 m
 
@@ -20,9 +23,21 @@ str(m, 3)
 m@object[[1]]
 class(m@map)
 
+# no CRS? no problem
+brew = st_set_crs(breweries, NA)
+mapview(brew)
+
+brew = st_transform(breweries, 3035)
+mapview(brew)
+mapview(brew, native.crs = TRUE)
+
 mapview(trails)
 mapview(franconia)
 mapview(poppendorf[[5]])
+
+mapview(as.data.frame(franconia))
+mapview(as.data.frame(franconia), xcol = "SHAPE_LEN", ycol = "SHAPE_AREA")
+mapview(as.data.frame(franconia), xcol = "SHAPE_LEN", ycol = "SHAPE_AREA", asp = 10)
 
 ### styling options & legends
 mapview(franconia, color = "white", col.regions = "red")
