@@ -35,6 +35,8 @@ mapview(slct)
 slct = selectFeatures(franconia, mode = "draw", op = sf::st_disjoint)
 mapview(slct)
 
+slct = selectFeatures(breweries, mode = "draw")
+
 ### advanced!! =============================================================
 # full code here: https://github.com/timelyportfolio/mapedit/blob/master/experiments/select_crosstalk.R
 library(sf)
@@ -44,7 +46,7 @@ library(crosstalk)
 library(htmltools)
 library(DT)
 
-boroughs <- st_read("http://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/nybb/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson")
+boroughs<- st_read("http://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/nybb/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson")
 boroughs$x <- seq(1:5)
 boroughs$y <- seq(2,10,2)
 
@@ -195,7 +197,6 @@ ns
     )
   )
 }
-
 
 # no reason to carry the load of the feature column
 #   in the datatables

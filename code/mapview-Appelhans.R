@@ -35,9 +35,11 @@ mapview(trails)
 mapview(franconia)
 mapview(poppendorf[[5]])
 
-mapview(as.data.frame(franconia))
-mapview(as.data.frame(franconia), xcol = "SHAPE_LEN", ycol = "SHAPE_AREA")
-mapview(as.data.frame(franconia), xcol = "SHAPE_LEN", ycol = "SHAPE_AREA", asp = 10)
+franconia_df = as.data.frame(franconia)
+
+mapview(franconia_df)
+mapview(franconia_df, xcol = "SHAPE_LEN", ycol = "SHAPE_AREA")
+mapview(franconia_df, xcol = "SHAPE_LEN", ycol = "SHAPE_AREA", asp = 10)
 
 ### styling options & legends
 mapview(franconia, color = "white", col.regions = "red")
@@ -45,10 +47,13 @@ mapview(breweries, color = "grey95", col.regions = "white")
 
 mapview(breweries, zcol = "founded", layer.name = "Year of foundation")
 mapview(breweries, zcol = "founded", at = seq(1300, 2200, 200))
-mapview(franconia, zcol = "district", legend = FALSE, label = NULL, highlight = NULL)
+mapview(franconia, zcol = "district", legend = FALSE, label = NULL)
 
 clrs = colorRampPalette(brewer.pal(3, "Set1"))
 mapview(franconia, zcol = "district", col.regions = clrs, alpha.regions = 1)
+
+cols = c("orange", "violet", "blue")
+mapview(franconia, zcol = "district", col.regions = cols, alpha.regions = 1)
 
 ### multiple layers
 mapview(breweries) + franconia
@@ -117,9 +122,6 @@ mapview(meuse,
         zcol = "cadmium",
         popup = popupGraph(p, type = "png"))
 
-# here, burst by row acturally is more sensible
-mapview(meuse, burst = "soil")
-
 ### popupGraph (interactive)
 brew1 = breweries[1, ]
 pop_content = mapview(brew1, map.types = "Esri.WorldImagery")@map
@@ -132,6 +134,8 @@ mapview(brew1,
                             width = 400,
                             height = 400))
 
+## NOTE: THIS CAN BECOME UNUSABLE VERY QUICKLY!!!
+
 ### popupImage (works for local or remote images for most common file types)
 pnt = data.frame(x = 174.764474, y = -36.877245)
 pnt = st_as_sf(pnt, coords = c("x", "y"), crs = 4326)
@@ -142,7 +146,7 @@ mapview(pnt, map.types = "Esri.WorldImagery",
         popup = popupImage(img, src = "remote", width = 600))
 
 ### small multiples and map syncing ============================================
-m1 = mapview(breweries, zcol = "village", map.types = "Esri.WorldImagery")
+m1 = mapview(poppendorf[[4]], map.types = "Esri.WorldImagery")
 m2 = mapview(franconia, zcol = "district", col.regions = clrs)
 m3 = mapview(breweries, zcol = "founded", legend = TRUE)
 m4 = leaflet() %>% addTiles() %>% addCircleMarkers(data = breweries)
@@ -165,9 +169,9 @@ latticeView(m1, m3)
 ### viewRGB - view RGB composites of any combination of raster layers
 viewRGB(poppendorf)
 raster::nlayers(poppendorf)
-viewRGB(poppendorf, 4, 3, 2)
+viewRGB(poppendorf, r = 4, g = 3, b = 2)
 viewRGB(poppendorf, 5, 4, 3)
-viewRGB(poppendorf, 5, 4, 3, quantiles = c(0.75, 1))
+viewRGB(poppendorf, 5, 4, 3, quantiles = c(0.25, 0.75)) # black/white outside this range
 
 ### plainview
 plainview(poppendorf[[1]])
@@ -175,7 +179,7 @@ plainview(poppendorf[[1]], at = seq(8000, 15000, 500))
 plainview(poppendorf, 4, 3, 2)
 plainview(poppendorf, 5, 4, 3, quantiles = c(0.5, 1))
 
- ### slideview
+### slideview
 slideview(poppendorf[[1]], poppendorf[[5]])
 slideview(poppendorf[[1]], poppendorf[[5]], legend = FALSE)
 
